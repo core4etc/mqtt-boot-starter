@@ -1,5 +1,6 @@
-package com.core4etc.mqtt;
+package com.core4etc.mqtt.load;
 
+import com.core4etc.mqtt.config.SystemConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
@@ -14,24 +15,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-public class SystemLoader implements Loader {
+public class SystemLoader implements Loader<SystemConfig> {
 
     private static final ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
     private static final ObjectMapper jsonMapper = new ObjectMapper();
-    private SystemConfig config;
-
-    public SystemConfig getConfig() {
-        return this.config;
-    }
-
-    public void setConfig(SystemConfig config) {
-        this.config = config;
-    }
 
     @Override
-    public void load() throws Exception {
-        SystemLoader loader = BeanFactory.get(SystemLoader.class);
-        loader.setConfig(findSystemConfig());
+    public SystemConfig load() throws Exception {
+        return findSystemConfig();
     }
 
     private static SystemConfig findSystemConfig() throws Exception {

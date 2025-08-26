@@ -1,23 +1,29 @@
-package com.core4etc.mqtt;
+package com.core4etc.mqtt.load;
 
+import com.core4etc.mqtt.config.SystemConfig;
+import com.core4etc.mqtt.bean.BeanFactory;
+import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-public class MqttLoader implements Loader {
+public class MqttLoader implements Loader<IMqttClient> {
 
     @Override
-    public void load() throws Exception {
-        SystemConfig.Core4etc.Mqtt config = BeanFactory.get(SystemLoader.class).getConfig().core4etc().mqtt();
+    public IMqttClient load() throws Exception {
+        SystemConfig.Core4etc.Mqtt config = BeanFactory.get(SystemConfig.class).core4etc().mqtt();
         try {
-            MqttClient client = new MqttClient(config.protocol() + "://" + config.url() +
+            IMqttClient client = new MqttClient(config.protocol() + "://" + config.url() +
                     ":" + config.port(), MqttClient.generateClientId(), new MemoryPersistence());
             client.connect();
             client.subscribe("/#");
+            return client;
 
         } catch (MqttException e) {
 //            log.warn(e.getMessage(), e);
+            e.printStackTrace();
+            return null;
         }
     }
 

@@ -1,5 +1,6 @@
-package com.core4etc.mqtt;
+package com.core4etc.mqtt.template;
 
+import com.core4etc.mqtt.bean.BeanFactory;
 import com.google.gson.Gson;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;

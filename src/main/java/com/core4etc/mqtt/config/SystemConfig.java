@@ -1,4 +1,4 @@
-package com.core4etc.mqtt;
+package com.core4etc.mqtt.config;
 
 public record SystemConfig(Core4etc core4etc) {
     public record Core4etc(Application application, Mqtt mqtt, Database database, Redis redis, Log log) {

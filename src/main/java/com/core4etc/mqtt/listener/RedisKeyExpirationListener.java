@@ -1,4 +1,4 @@
-package com.core4etc.mqtt;
+package com.core4etc.mqtt.listener;
 
 import io.lettuce.core.pubsub.RedisPubSubListener;
 import org.slf4j.Logger;

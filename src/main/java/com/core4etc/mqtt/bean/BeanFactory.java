@@ -1,4 +1,4 @@
-package com.core4etc.mqtt;
+package com.core4etc.mqtt.bean;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -35,6 +35,10 @@ public class BeanFactory {
             throw new IllegalArgumentException("Not created bean from this class");
         }
         instances.remove(clazz);
+    }
+
+    public static <T> Boolean exists(T obj) {
+        return instances.containsKey(obj.getClass());
     }
 
     private static <T> T createInstanceSafe(Class<T> clazz) {

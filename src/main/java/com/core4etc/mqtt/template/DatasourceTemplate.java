@@ -1,4 +1,7 @@
-package com.core4etc.mqtt;
+package com.core4etc.mqtt.template;
+
+import com.core4etc.mqtt.load.DatasourceLoader;
+import com.core4etc.mqtt.bean.BeanFactory;
 
 import java.sql.Connection;
 
@@ -14,7 +17,8 @@ public class DatasourceTemplate {
             return BeanFactory.get(Connection.class);
         } catch (Exception e) {
 //            log.warn(e.getMessage(), e);
-            return getConnection();
+            e.printStackTrace();
+            return null;
         }
     }
 
