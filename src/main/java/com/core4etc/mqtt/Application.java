@@ -5,6 +5,7 @@ import com.core4etc.mqtt.config.SystemConfig;
 import com.core4etc.mqtt.load.*;
 import io.lettuce.core.RedisClient;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
 
 import java.sql.Connection;
 import java.util.Optional;
@@ -20,12 +21,14 @@ public final class Application {
         // Utility class - prevent instantiation
     }
 
-    // Builder Pattern for fluent configuration
+    // Base Builder
     public static class Builder {
-        private Loader<SystemConfig> systemLoader = new SystemLoader();
-        private Loader<RedisClient> redisLoader;
-        private Loader<Connection> datasourceLoader;
-        private Loader<IMqttClient> mqttLoader;
+        protected Loader<SystemConfig> systemLoader = new SystemLoader();
+        protected Loader<RedisClient> redisLoader;
+        protected Loader<Connection> datasourceLoader;
+        protected Loader<IMqttClient> mqttLoader;
+        protected MqttCallback callback;
+        protected String subscribe;
 
         public Builder withSystem(Loader<SystemConfig> loader) {
             this.systemLoader = loader;
@@ -56,20 +59,43 @@ public final class Application {
             return this;
         }
 
-        public Builder withMqtt(Loader<IMqttClient> loader) {
+        public MqttBuilder withMqtt(Loader<IMqttClient> loader) {
             this.mqttLoader = loader;
-            return this;
+            return new MqttBuilder(this);
         }
 
-        public Builder withMqttIfAbsent(Loader<IMqttClient> loader) {
+        public MqttBuilder withMqttIfAbsent(Loader<IMqttClient> loader) {
             if (this.mqttLoader == null) {
                 this.mqttLoader = loader;
             }
-            return this;
+            return new MqttBuilder(this);
         }
 
         public void run() throws Exception {
             Application.initialize(this);
+        }
+    }
+
+    // Specialized Builder for MQTT that allows callbacks
+    public static class MqttBuilder {
+        private final Builder builder;
+
+        public MqttBuilder(Builder builder) {
+            this.builder = builder;
+        }
+
+        public MqttBuilder subscribe(String subscribe) {
+            this.builder.subscribe = subscribe;
+            return this;
+        }
+
+        public MqttBuilder withCallback(MqttCallback callback) {
+            this.builder.callback = callback;
+            return this;
+        }
+
+        public void run() throws Exception {
+            Application.initialize(builder);
         }
     }
 
@@ -100,6 +126,15 @@ public final class Application {
                     mqttClient = client;
                     BeanFactory.create(client);
                 });
+
+        if (config.subscribe != null) {
+            mqttClient.subscribe(config.subscribe);
+        }
+
+        // Execute callback if provided
+        if (config.callback != null) {
+            mqttClient.setCallback(config.callback);
+        }
     }
 
     private static <T> void initializeOptionalComponent(

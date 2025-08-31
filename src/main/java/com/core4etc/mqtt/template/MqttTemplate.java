@@ -18,7 +18,7 @@ public class MqttTemplate implements AutoCloseable {
     }
 
     public MqttTemplate(boolean autoReconnect) {
-        this.mqttClient = BeanFactory.get(IMqttClient.class);
+        this.mqttClient = BeanFactory.get(MqttClient.class);
         this.autoReconnect = autoReconnect;
         this.subscribers = new ConcurrentHashMap<>();
         setupConnectionCallback();
@@ -50,6 +50,11 @@ public class MqttTemplate implements AutoCloseable {
     /**
      * Subscribe to a topic with callback
      */
+
+    public void subscribe(String topic) throws MqttException {
+        mqttClient.subscribe(topic);
+    }
+
     public void subscribe(String topic, Consumer<MqttMessage> messageHandler) throws MqttException {
         subscribe(topic, 1, messageHandler);
     }

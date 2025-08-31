@@ -22,7 +22,8 @@ public class MqttLoader implements Loader<IMqttClient> {
                         .withMaxInflight(200)
                         .build()
         );
-        client.subscribe("/#");
+        System.out.println("connect to mqtt");
+        /*client.subscribe("/#");*/
         return client;
     }
 
