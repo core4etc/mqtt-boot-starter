@@ -1,4 +1,4 @@
-# Core4etc MQTT Framework (mqtt-boot-starter)
+# Mqtt Boot Starter (Core4etc MQTT Framework)
 
 **A comprehensive Java-based MQTT framework designed for building robust IoT and messaging applications with built-in support for Redis, database connectivity, and flexible configuration management.**
 
