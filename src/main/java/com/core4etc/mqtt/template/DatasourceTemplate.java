@@ -1,7 +1,7 @@
 package com.core4etc.mqtt.template;
 
-import com.core4etc.mqtt.load.DatasourceLoader;
 import com.core4etc.mqtt.bean.Bean;
+import com.core4etc.mqtt.load.DatasourceLoader;
 
 import java.sql.Connection;
 
@@ -85,9 +85,10 @@ public class DatasourceTemplate {
         try {
             if (connection.isClosed()) {
                 Bean.remove(Connection.class);
-                Bean.get(DatasourceLoader.class).load();
+                connection = Bean.get(DatasourceLoader.class).load();
+                Bean.create(connection, Connection.class);
             }
-            return Bean.get(Connection.class);
+            return connection;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -113,7 +114,10 @@ public class DatasourceTemplate {
      */
     public static void close() {
         try {
-            Bean.get(Connection.class).close();
+            Connection connection = Bean.get(Connection.class);
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

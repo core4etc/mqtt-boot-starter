@@ -2,9 +2,12 @@ package com.core4etc.mqtt.template;
 
 import com.core4etc.mqtt.bean.Bean;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
+
+import java.util.Objects;
 
 /**
  * A template class for simplifying Redis operations including data storage, retrieval,
@@ -49,6 +52,10 @@ import io.lettuce.core.api.sync.RedisCommands;
  */
 public class RedisTemplate {
 
+    public static <T> void put(String key, T value) {
+        put(key, value, null);
+    }
+
     /**
      * Stores a value in Redis with a specified expiration time.
      * The value is serialized to JSON format using Gson before storage.
@@ -59,38 +66,15 @@ public class RedisTemplate {
      * @param expireTime the time-to-live in seconds for the key, or null for no expiration
      * @throws RuntimeException if Redis operation fails or serialization fails
      */
-    public <T> void put(String key, T value, Long expireTime) {
+    public static <T> void put(String key, T value, Long expireTime) {
         try (StatefulRedisConnection<String, String> connection = Bean.get(RedisClient.class).connect()) {
             RedisCommands<String, String> syncCommands = connection.sync();
             String serializedValue = new Gson().toJson(value);
-            syncCommands.setex(key, expireTime, serializedValue);
-        }
-    }
-
-    /**
-     * Retrieves and deserializes a value from Redis, specifically designed for
-     * Integer values. This method is synchronized to ensure thread safety.
-     *
-     * <p><b>Note:</b> This method is specifically typed for Integer retrieval
-     * and uses unchecked casting. For generic object retrieval with proper
-     * type safety, consider using a different approach.</p>
-     *
-     * @param <T> the expected return type (primarily Integer)
-     * @param key the Redis key to retrieve
-     * @return the deserialized Integer value, or null if the key doesn't exist
-     * @throws NumberFormatException if the stored value cannot be parsed as an Integer
-     * @throws RuntimeException if Redis operation fails
-     */
-    @SuppressWarnings("unchecked")
-    public synchronized <T> T getDisconnected(String key) {
-        try (StatefulRedisConnection<String, String> connection = Bean.get(RedisClient.class).connect()) {
-            RedisCommands<String, String> syncCommands = connection.sync();
-            String strValue = syncCommands.get(key);
-            Integer value = null;
-            if (strValue != null) {
-                value = Integer.valueOf(strValue);
+            if (expireTime != null) {
+                syncCommands.setex(key, expireTime, serializedValue);
+            }else {
+                syncCommands.set(key, serializedValue);
             }
-            return (T) value;
         }
     }
 
@@ -102,10 +86,10 @@ public class RedisTemplate {
      * @return the string value associated with the key, or null if the key doesn't exist
      * @throws RuntimeException if Redis operation fails
      */
-    public synchronized String get(String key) {
+    public static synchronized <T> T get(String key, Class<T> clazz) {
         try (StatefulRedisConnection<String, String> connection = Bean.get(RedisClient.class).connect()) {
             RedisCommands<String, String> syncCommands = connection.sync();
-            return syncCommands.get(key);
+            return new Gson().fromJson(syncCommands.get(key), clazz);
         }
     }
 
@@ -116,7 +100,7 @@ public class RedisTemplate {
      *
      * @throws RuntimeException if shutdown fails
      */
-    public void close() {
+    public static void close() {
         Bean.get(RedisClient.class).shutdown();
     }
 

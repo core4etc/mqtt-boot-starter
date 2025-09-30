@@ -49,7 +49,7 @@ import java.util.function.Consumer;
  * @see MqttMessage
  * @see AutoCloseable
  */
-public class MqttTemplate implements AutoCloseable {
+public class MqttTemplate {
 
     private final IMqttClient mqttClient;
     private final ConcurrentHashMap<String, CopyOnWriteArrayList<Consumer<MqttMessage>>> subscribers;
@@ -69,7 +69,7 @@ public class MqttTemplate implements AutoCloseable {
      * @param autoReconnect true to enable automatic reconnection, false to disable
      */
     public MqttTemplate(boolean autoReconnect) {
-        this.mqttClient = Bean.get(MqttClient.class);
+        this.mqttClient = Bean.get(IMqttClient.class);
         this.autoReconnect = autoReconnect;
         this.subscribers = new ConcurrentHashMap<>();
     }
@@ -230,7 +230,6 @@ public class MqttTemplate implements AutoCloseable {
      *
      * @throws MqttException if disconnection or closing fails
      */
-    @Override
     public void close() throws MqttException {
         if (mqttClient != null && mqttClient.isConnected()) {
             mqttClient.disconnect();

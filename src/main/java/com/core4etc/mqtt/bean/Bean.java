@@ -55,12 +55,12 @@ public class Bean {
      * @throws IllegalArgumentException if the provided object is null
      */
     @SuppressWarnings("unchecked")
-    public static <T> T create(T obj) {
+    public static <T> T create(T obj, Class<?> clazz) {
         if (obj == null) {
             throw new IllegalArgumentException("Object cannot be null");
         }
 
-        return (T) instances.computeIfAbsent(obj.getClass(), k -> obj);
+        return (T) instances.computeIfAbsent(clazz, k -> obj);
     }
 
     /**

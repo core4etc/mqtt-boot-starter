@@ -72,15 +72,19 @@ public class RedisLoader implements Loader<RedisClient> {
      * @throws RuntimeException if Redis client creation fails or if subscription
      *         setup encounters an error
      */
-    public RedisClient load() {
+    public RedisClient load() throws Exception {
         SystemConfig.Core4etc.Redis config = Bean.get(SystemConfig.class).core4etc().redis();
-        try (RedisClient redisClient = RedisClient.create("redis://" + (config.password().isEmpty() ? "" : ":" + config.password()) +
-                "@" + config.url() + ":" + config.port())) {
-            if (config.subscribe()) {
-                subscribe();
-            }
-            return redisClient;
+        RedisClient redisClient;
+        try {
+            redisClient = RedisClient.create("redis://" + (config.password() == null ? "" : ":" + config.password()) +
+                    "@" + config.url() + ":" + config.port());
+        } catch (Exception e) {
+            throw new Exception(e.getCause());
         }
+        if (config.subscribe()) {
+            subscribe();
+        }
+        return redisClient;
     }
 
     /**
@@ -119,4 +123,8 @@ public class RedisLoader implements Loader<RedisClient> {
         });
     }
 
+    @Override
+    public Class<RedisClient> getType() {
+        return RedisClient.class;
+    }
 }

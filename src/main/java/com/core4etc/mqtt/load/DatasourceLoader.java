@@ -67,11 +67,19 @@ public class DatasourceLoader implements Loader<Connection> {
     @Override
     public Connection load() throws Exception {
         SystemConfig.Core4etc.Database config = Bean.get(SystemConfig.class).core4etc().database();
-        try (Connection connection = DriverManager.getConnection(
-                "jdbc:postgresql://" + config.url() + ":" + config.port() + "/" + config.name(),
-                config.username(), config.password())) {
-            return connection;
+        Connection connection;
+        try {
+            connection = DriverManager.getConnection(
+                    "jdbc:postgresql://" + config.url() + ":" + config.port() + "/" + config.name(),
+                    config.username(), config.password());
+        } catch (Exception e) {
+            throw new Exception(e.getCause());
         }
+        return connection;
     }
 
+    @Override
+    public Class<Connection> getType() {
+        return Connection.class;
+    }
 }

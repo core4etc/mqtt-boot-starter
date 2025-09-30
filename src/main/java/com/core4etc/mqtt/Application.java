@@ -2,13 +2,13 @@ package com.core4etc.mqtt;
 
 import com.core4etc.mqtt.bean.Bean;
 import com.core4etc.mqtt.config.SystemConfig;
-import com.core4etc.mqtt.load.*;
+import com.core4etc.mqtt.load.Loader;
+import com.core4etc.mqtt.load.SystemLoader;
 import io.lettuce.core.RedisClient;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 
 import java.sql.Connection;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 /**
  * The main application class for initializing and managing MQTT application components.
@@ -199,14 +199,14 @@ public final class Application {
     private static void initialize(Builder config) throws Exception {
         // SystemConfig is mandatory
         systemConfig = config.systemLoader.load();
-        Bean.create(systemConfig);
+        Bean.create(systemConfig, config.systemLoader.getType());
 
         // Optional components
-        initializeOptionalComponent(config.redisLoader, RedisLoader::new);
+        initializeOptionalComponent(config.redisLoader);
 
-        initializeOptionalComponent(config.datasourceLoader, DatasourceLoader::new);
+        initializeOptionalComponent(config.datasourceLoader);
 
-        initializeOptionalComponent(config.mqttLoader, MqttLoader::new);
+        initializeOptionalComponent(config.mqttLoader);
     }
 
     /**
@@ -215,16 +215,12 @@ public final class Application {
      *
      * @param <T> the type of component to initialize
      * @param customLoader the custom loader to use, or null to use default
-     * @param defaultLoaderSupplier supplier for the default loader if custom loader is null
      * @throws Exception if component loading fails
      */
-    private static <T> void initializeOptionalComponent(
-            Loader<T> customLoader,
-            Supplier<Loader<T>> defaultLoaderSupplier) throws Exception {
-
+    private static <T> void initializeOptionalComponent(Loader<T> customLoader) throws Exception {
         if (customLoader != null) {
             T component = customLoader.load();
-            Bean.create(component);
+            Bean.create(component, customLoader.getType());
         }
     }
 

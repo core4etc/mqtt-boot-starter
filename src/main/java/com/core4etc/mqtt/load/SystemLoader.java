@@ -82,6 +82,11 @@ public class SystemLoader implements Loader<SystemConfig> {
         return findSystemConfig();
     }
 
+    @Override
+    public Class<SystemConfig> getType() {
+        return SystemConfig.class;
+    }
+
     /**
      * Finds and loads the system configuration from the first available configuration file.
      * Searches recursively from the root directory for YAML (.yaml, .yml) and Properties (.properties) files.

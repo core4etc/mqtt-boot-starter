@@ -100,4 +100,8 @@ public class MqttLoader implements Loader<IMqttClient> {
         return client;
     }
 
+    @Override
+    public Class<IMqttClient> getType() {
+        return IMqttClient.class;
+    }
 }
