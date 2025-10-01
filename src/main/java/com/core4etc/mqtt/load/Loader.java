@@ -33,7 +33,7 @@ import java.util.function.Supplier;
  * @see java.util.function.Supplier
  */
 @FunctionalInterface
-public interface Loader<T> {
+public interface Loader<T> extends Supplier<T> {
 
     /**
      * Loads and returns a result, potentially throwing a checked exception.
@@ -59,8 +59,23 @@ public interface Loader<T> {
      * @throws RuntimeException if the {@link #load()} method throws an exception.
      *         The RuntimeException contains the original exception as its cause.
      */
+    @Override
+    default T get() {
+        try {
+            return load();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load resource", e);
+        }
+    }
+
+    /**
+     * Returns the class type of the loaded result.
+     * This method provides metadata about the type of objects this loader produces.
+     *
+     * @return the class type of the loaded result
+     * @throws UnsupportedOperationException if the implementation does not provide type information
+     */
     default Class<T> getType() {
         throw new UnsupportedOperationException("Type not provided");
     }
-
 }

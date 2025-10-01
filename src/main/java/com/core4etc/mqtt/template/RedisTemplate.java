@@ -14,7 +14,7 @@ import java.util.Objects;
  * and connection management. This class provides a high-level abstraction over
  * the Lettuce Redis client with support for JSON serialization and expiration.
  *
- * <p><b>Key Features:</b>
+ * <p><b>Key Features:</b></p>
  * <ul>
  *   <li>Automatic connection management for each operation</li>
  *   <li>JSON serialization/deserialization using Gson</li>
@@ -22,7 +22,6 @@ import java.util.Objects;
  *   <li>Thread-safe operations with synchronized methods</li>
  *   <li>Simplified get and put operations</li>
  * </ul>
- * </p>
  *
  * <p><b>Example usage:</b></p>
  * <pre>
@@ -52,6 +51,28 @@ import java.util.Objects;
  */
 public class RedisTemplate {
 
+    /**
+     * Stores a value in Redis without expiration time.
+     * The value is serialized to JSON format using Gson before storage.
+     * This method delegates to {@link #put(String, Object, Long)} with a null expiration time.
+     *
+     * <p><b>Usage Example:</b></p>
+     * <pre>
+     * {@code
+     * // Store a user object without expiration
+     * RedisTemplate.put("user:123", userObject);
+     *
+     * // Store a string value
+     * RedisTemplate.put("config:setting", "some value");
+     * }
+     * </pre>
+     *
+     * @param <T> the type of the value to store
+     * @param key the Redis key under which to store the value
+     * @param value the value to store (will be serialized to JSON)
+     * @throws RuntimeException if Redis operation fails or serialization fails
+     * @see #put(String, Object, Long)
+     */
     public static <T> void put(String key, T value) {
         put(key, value, null);
     }
@@ -82,8 +103,10 @@ public class RedisTemplate {
      * Retrieves a string value from Redis. This method is synchronized to ensure thread safety.
      * Returns the raw string value stored in Redis without any deserialization.
      *
+     * @param <T> the type of the value to retrieve
      * @param key the Redis key to retrieve
-     * @return the string value associated with the key, or null if the key doesn't exist
+     * @param clazz the class type for deserialization
+     * @return the deserialized object associated with the key, or null if the key doesn't exist
      * @throws RuntimeException if Redis operation fails
      */
     public static synchronized <T> T get(String key, Class<T> clazz) {

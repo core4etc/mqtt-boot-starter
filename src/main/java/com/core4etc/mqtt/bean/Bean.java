@@ -51,6 +51,7 @@ public class Bean {
      *
      * @param <T> the type of the object
      * @param obj the object instance to create or use as singleton
+     * @param clazz the class type under which to store the singleton
      * @return the singleton instance of the specified object's class
      * @throws IllegalArgumentException if the provided object is null
      */

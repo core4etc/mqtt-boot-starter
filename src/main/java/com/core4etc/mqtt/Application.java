@@ -16,7 +16,7 @@ import java.util.Optional;
  * application components including system configuration, Redis client, database
  * connection, and MQTT client.
  *
- * <p><b>Key Features:</b>
+ * <p><b>Key Features:</b></p>
  * <ul>
  *   <li>Builder pattern for flexible component configuration</li>
  *   <li>Automatic dependency management through Bean container</li>
@@ -24,16 +24,14 @@ import java.util.Optional;
  *   <li>Thread-safe singleton component access</li>
  *   <li>Simplified application bootstrap</li>
  * </ul>
- * </p>
  *
- * <p><b>Component Initialization Order:</b>
+ * <p><b>Component Initialization Order:</b></p>
  * <ol>
  *   <li>System configuration (mandatory)</li>
  *   <li>Redis client (optional)</li>
  *   <li>Database connection (optional)</li>
  *   <li>MQTT client (optional)</li>
  * </ol>
- * </p>
  *
  * <p><b>Example usage:</b></p>
  * <pre>

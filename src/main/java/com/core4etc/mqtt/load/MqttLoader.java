@@ -11,7 +11,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  * This class creates and connects an MQTT client using configuration obtained
  * from the system configuration bean.
  *
- * <p>The MQTT client is configured with the following settings:
+ * <p>The MQTT client is configured with the following settings:</p>
  * <ul>
  *   <li>Automatic reconnect enabled</li>
  *   <li>Clean session disabled (persistent sessions)</li>
@@ -19,7 +19,6 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  *   <li>Memory persistence for message storage</li>
  *   <li>Maximum inflight messages set to 200</li>
  * </ul>
- * </p>
  *
  * <p><b>Example usage:</b></p>
  * <pre>
@@ -56,14 +55,13 @@ public class MqttLoader implements Loader<IMqttClient> {
      * <p>The connection URL is constructed in the format:
      * {@code <protocol>://<url>:<port>}</p>
      *
-     * <p><b>Connection Options:</b>
+     * <p><b>Connection Options:</b></p>
      * <ul>
      *   <li>Automatic reconnect: Enabled</li>
      *   <li>Clean session: Disabled (persistent session)</li>
      *   <li>Authentication: Username and password from configuration</li>
      *   <li>Max inflight messages: 200</li>
      * </ul>
-     * </p>
      *
      * <p><b>Note:</b> The returned MQTT client is already connected to the broker.
      * The caller is responsible for properly disconnecting and closing the client

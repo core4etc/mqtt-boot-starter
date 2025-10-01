@@ -20,20 +20,18 @@ import java.util.Properties;
  * This class supports loading configuration from YAML (.yaml, .yml) and Properties (.properties) files.
  * It automatically searches for configuration files in the specified directory and loads the first found file.
  *
- * <p><b>Supported Formats:</b>
+ * <p><b>Supported Formats:</b></p>
  * <ul>
  *   <li>YAML files (.yaml, .yml) - parsed using Jackson YAML factory</li>
  *   <li>Properties files (.properties) - converted to nested map structure and then to SystemConfig</li>
  * </ul>
- * </p>
  *
- * <p><b>Search Behavior:</b>
+ * <p><b>Search Behavior:</b></p>
  * <ul>
  *   <li>Searches recursively from the root directory</li>
  *   <li>Uses system property "config.dir" to determine root directory (defaults to current directory)</li>
  *   <li>Returns the first matching configuration file found</li>
  * </ul>
- * </p>
  *
  * <p><b>Example usage:</b></p>
  * <pre>
@@ -105,16 +103,22 @@ public class SystemLoader implements Loader<SystemConfig> {
         }
 
         // For now: just load the first file
-        Path file = configFiles.get(0);
-        System.out.println("Loading config from: " + file);
+        for (Path configFilePath : configFiles) {
+            try {
+                System.out.println("Loading config from: " + configFilePath);
 
-        if (file.toString().endsWith(".yaml") || file.toString().endsWith(".yml")) {
-            return yamlMapper.readValue(file.toFile(), SystemConfig.class);
-        } else if (file.toString().endsWith(".properties")) {
-            return loadFromProperties(file.toFile());
-        } else {
-            throw new IllegalArgumentException("Unsupported config format: " + file);
+                if (configFilePath.toString().endsWith(".yaml") || configFilePath.toString().endsWith(".yml")) {
+                    return yamlMapper.readValue(configFilePath.toFile(), SystemConfig.class);
+                } else if (configFilePath.toString().endsWith(".properties")) {
+                    return loadFromProperties(configFilePath.toFile());
+                } else {
+                    throw new IllegalArgumentException("Unsupported config format: " + configFilePath);
+                }
+            } catch (Exception e) {
+                //
+            }
         }
+        return null;
     }
 
     /**

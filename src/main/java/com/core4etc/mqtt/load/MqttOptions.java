@@ -7,7 +7,7 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
  * This class provides a convenient way to set up MQTT connection options with sensible defaults
  * and a chainable builder pattern.
  *
- * <p><b>Default Values:</b>
+ * <p><b>Default Values:</b></p>
  * <ul>
  *   <li>Automatic Reconnect: true</li>
  *   <li>Clean Session: false</li>
@@ -15,7 +15,6 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
  *   <li>Connection Timeout: 30 seconds</li>
  *   <li>Keep Alive Interval: 60 seconds</li>
  * </ul>
- * </p>
  *
  * <p><b>Example usage:</b></p>
  * <pre>

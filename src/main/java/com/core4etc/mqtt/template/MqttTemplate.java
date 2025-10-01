@@ -12,7 +12,7 @@ import java.util.function.Consumer;
  * and managing MQTT connections. This class provides a high-level abstraction over
  * the Paho MQTT client with support for automatic reconnection and message handling.
  *
- * <p><b>Key Features:</b>
+ * <p><b>Key Features:</b></p>
  * <ul>
  *   <li>Automatic connection management and reconnection</li>
  *   <li>Simplified publish/subscribe methods with various overloads</li>
@@ -20,7 +20,6 @@ import java.util.function.Consumer;
  *   <li>Thread-safe subscription management</li>
  *   <li>AutoCloseable implementation for resource cleanup</li>
  * </ul>
- * </p>
  *
  * <p><b>Example usage:</b></p>
  * <pre>

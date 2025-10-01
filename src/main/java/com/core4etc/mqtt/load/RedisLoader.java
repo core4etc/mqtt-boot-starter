@@ -14,22 +14,20 @@ import java.util.concurrent.Executors;
  * This class creates a Redis client using configuration obtained from the system
  * configuration bean and optionally sets up a subscription for key expiration events.
  *
- * <p>The Redis connection URL is constructed based on the configuration parameters:
+ * <p>The Redis connection URL is constructed based on the configuration parameters:</p>
  * <ul>
  *   <li>URL and port from configuration</li>
  *   <li>Password authentication if provided</li>
  *   <li>Automatic subscription to key expiration events if enabled in configuration</li>
  * </ul>
- * </p>
  *
- * <p><b>Key Features:</b>
+ * <p><b>Key Features:</b></p>
  * <ul>
  *   <li>Creates Redis client with proper authentication</li>
  *   <li>Optional subscription to Redis key expiration events</li>
  *   <li>Uses a dedicated thread for pub/sub operations</li>
  *   <li>Automatic cleanup on shutdown</li>
  * </ul>
- * </p>
  *
  * <p><b>Example usage:</b></p>
  * <pre>

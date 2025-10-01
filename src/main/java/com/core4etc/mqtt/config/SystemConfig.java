@@ -5,7 +5,7 @@ package com.core4etc.mqtt.config;
  * This configuration structure contains all necessary settings for various application
  * components including MQTT, database, Redis, logging, and general application settings.
  *
- * <p><b>Configuration Structure:</b>
+ * <p><b>Configuration Structure:</b></p>
  * <ul>
  *   <li>Core application settings</li>
  *   <li>MQTT broker connection parameters</li>
@@ -13,7 +13,6 @@ package com.core4etc.mqtt.config;
  *   <li>Redis server configuration</li>
  *   <li>Logging configuration</li>
  * </ul>
- * </p>
  *
  * <p><b>Usage Example:</b></p>
  * <pre>

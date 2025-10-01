@@ -9,22 +9,20 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
  * This class implements the {@link MqttCallback} interface and handles
  * connection loss with automatic reconnection capabilities.
  *
- * <p><b>Key Features:</b>
+ * <p><b>Key Features:</b></p>
  * <ul>
  *   <li>Automatic connection loss detection and recovery</li>
  *   <li>Integrated {@link MqttTemplate} for simplified MQTT operations</li>
  *   <li>Configurable auto-reconnect behavior with delay</li>
  *   <li>Error logging for connection issues</li>
  * </ul>
- * </p>
  *
- * <p><b>Usage:</b>
- * Extend this class and implement the required MQTT callback methods:
+ * <p><b>Usage:</b></p>
+ * <p>Extend this class and implement the required MQTT callback methods:</p>
  * <ul>
  *   <li>{@link MqttCallback#messageArrived(String, org.eclipse.paho.client.mqttv3.MqttMessage)}</li>
  *   <li>{@link MqttCallback#deliveryComplete(org.eclipse.paho.client.mqttv3.IMqttDeliveryToken)}</li>
  * </ul>
- * </p>
  *
  * <p><b>Example usage:</b></p>
  * <pre>
@@ -70,14 +68,13 @@ public abstract class Callback implements MqttCallback {
      * Handles MQTT connection loss events and attempts automatic reconnection
      * if auto-reconnect is enabled in the MQTT template.
      *
-     * <p><b>Reconnection Behavior:</b>
+     * <p><b>Reconnection Behavior:</b></p>
      * <ul>
      *   <li>Logs the connection loss event to standard error</li>
      *   <li>Waits 5 seconds before attempting reconnection</li>
      *   <li>Attempts to reconnect using {@link MqttTemplate#reconnect()}</li>
      *   <li>Logs any reconnection failures to standard error</li>
      * </ul>
-     * </p>
      *
      * <p><b>Note:</b> Reconnection only occurs if {@link MqttTemplate#isAutoReconnect()}
      * returns true. The method uses a fixed 5-second delay before reconnection attempts.</p>
